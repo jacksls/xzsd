@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.bookstore.menu.mapper.MenuMapper">
+
+    <resultMap id="baseMap" type="com.neusoft.bookstore.menu.model.Menu">
+        <id column="id" property="id"/>
+        <result column="menu_name" property="menuName"/>
+        <result column="menu_code" property="menuCode"/>
+        <result column="type" property="type"/>
+        <result column="menu_url" property="menuUrl"/>
+        <result column="remark" property="remark"/>
+        <result column="parent_menu_code" property="parentMenuCode"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+    <select id="findMenuByParentMenuCodeAndName" parameterType="com.neusoft.bookstore.menu.model.Menu" resultMap="baseMap">
+        select
+            menu_name,
+            menu_code,
+            type,
+            menu_url,
+            remark,
+            parent_menu_code,
+            id,
+            is_delete,
+            created_by,
+            created_time,
+            updated_by,
+            updated_time
+        from
+            t_sys_menu
+        where is_delete=0
+        and parent_menu_code=#{parentMenuCode}
+        and menu_name=#{menuName}
+        <if test="menuCode!=null and menuCode!=''">
+            and menu_code!=#{menuCode}
+        </if>
+    </select>
+
+    <select id="findMenuByMenuCode" parameterType="string" resultMap="baseMap">
+        select
+            menu_name,
+            menu_code,
+            type,
+            menu_url,
+            remark,
+            parent_menu_code,
+            id,
+            is_delete,
+            created_by,
+            created_time,
+            updated_by,
+            updated_time
+        from
+            t_sys_menu
+        where menu_code=#{menuCode}
+
+    </select>
+
+
+    <insert id="insertMenu" parameterType="com.neusoft.bookstore.menu.model.Menu">
+        insert into t_sys_menu(menu_name,menu_code,type,menu_url,remark,parent_menu_code,is_delete,created_by,created_time)
+        values (
+            #{menuName},
+            REPLACE(uuid(),'-',''),
+            #{type},
+            #{menuUrl},
+            #{remark},
+            #{parentMenuCode},
+            0,
+            #{createdBy},
+            now()
+        )
+    </insert>
+
+    <update id="updateTypeAndUrlByCode" parameterType="string">
+        update t_sys_menu set type=1, menu_url=null where menu_code=#{menuCode} and is_delete=0
+    </update>
+    <update id="updateMenuByCode" parameterType="com.neusoft.bookstore.menu.model.Menu">
+        update t_sys_menu
+        set menu_name=#{menuName},
+            type=#{type},
+            menu_url=#{menuUrl},
+            remark=#{remark},
+            updated_by=#{updatedBy},
+            updated_time=now()
+        where menu_code=#{menuCode} and is_delete=0
+    </update>
+
+    <select id="listMenus" resultMap="baseMap">
+        select
+            menu_name,
+            menu_code,
+            type,
+            menu_url,
+            remark,
+            parent_menu_code,
+            id,
+            is_delete,
+            created_by,
+            created_time,
+            updated_by,
+            updated_time
+        from
+            t_sys_menu
+    </select>
+
+    <select id="findChildMenus" resultMap="baseMap" parameterType="string">
+        select
+            menu_name,
+            menu_code,
+            type,
+            menu_url,
+            remark,
+            parent_menu_code,
+            id,
+            is_delete,
+            created_by,
+            created_time,
+            updated_by,
+            updated_time
+        from
+            t_sys_menu
+        where is_delete=0
+        and parent_menu_code=#{menuCode}
+    </select>
+
+    <update id="deleteMenuByCode" parameterType="string">
+        update t_sys_menu set is_delete=1 where menu_code=#{menuCode} and is_delete=0
+    </update>
+
+</mapper>

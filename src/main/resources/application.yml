@@ -1,0 +1,40 @@
+server:
+  port: 8081
+#数据库配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xzsd?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 552552
+    druid:
+      initialSize: 1
+      minIdle: 1
+      maxActive: 20
+      maxWait: 60000
+      validationQuery: select 'x' from dual
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      filters: stat,slf4j
+  redis:
+    host: 127.0.0.1
+    port: 6379
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  configuration:
+    # 控制台 打印sql日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis分页插件配置
+pagehelper:
+  helperDialect: mysql
+  reasonable: false
+  supportMethodsArguments: true
+  params: count=countSql
+logging:
+  level:
+    com.neusoft.bootstore.*.mapper: debug
+    com.neusoft.bootstore: debug
