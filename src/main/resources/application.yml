@@ -38,3 +38,11 @@ logging:
   level:
     com.neusoft.bootstore.*.mapper: debug
     com.neusoft.bootstore: debug
+
+qiniu:
+  accessKey: tUKsmessqjTA2AZ05EOwxJDfn2HcF9rum3XQ095P
+  secretKey: 59RxMYNBITZbXCrLcgQqQpBazD-fFajpW5WJgvWg
+  bucketName: ufo-552
+  qiniuDomin: http://q9xwv5x3i.bkt.clouddn.com/
+
+

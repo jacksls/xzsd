@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.bookstore.shoppingcar.mapper.ShoppingCarMapper">
+
+    <resultMap id="baseMap" type="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
+        <id column="id" property="id"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="shop_num" property="shopNum"/>
+        <result column="business_code" property="businessCode"/>
+        <result column="order_user_id" property="orderUserId"/>
+        <result column="is_delete" property="isDelete"></result>
+        <result column="created_by" property="createdBy"></result>
+        <result column="created_time" property="createdTime"></result>
+        <result column="updated_by" property="updatedBy"></result>
+        <result column="updated_time" property="updatedTime"></result>
+    </resultMap>
+
+    <select id="findGoodsFromCar" resultType="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
+        SELECT
+            sku_code,
+            shop_num,
+            business_code,
+            order_user_id,
+            id,
+            is_delete,
+            created_by,
+            created_time,
+            updated_by,
+            updated_time
+        FROM
+            t_sys_shopping_car
+        WHERE
+            is_delete=0
+        AND sku_code=#{skuCode}
+        AND business_code=#{businessCode}
+        AND order_user_id=#{orderUserId}
+    </select>
+</mapper>

@@ -4,13 +4,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.neusoft.bookstore.customer.mapper.CustomerMapper;
 import com.neusoft.bookstore.customer.model.Customer;
+import com.neusoft.bookstore.customer.service.CustomerService;
 import com.neusoft.bookstore.util.ErrorCode;
-import com.neusoft.bookstore.util.MethodUtils;
+import com.neusoft.bookstore.util.MD5Util;
 import com.neusoft.bookstore.util.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import com.neusoft.bookstore.util.MD5Util;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -22,15 +23,15 @@ import java.util.Map;
  * @date 2020/4/23 11:00
  */
 @Service
-public class CustomerServiceImpl {
+public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerMapper customerMapper;
 
     @Autowired
-    private MethodUtils methodUtils;
+    private RedisTemplate<Object, Object> redisTemplate;
 
 
-
+    @Override
     public ResponseVo addCustomer(Customer customer) {
         /*
         新增用户:
@@ -66,9 +67,14 @@ public class CustomerServiceImpl {
         BigDecimal frontScore = new BigDecimal(customer.getFrontScore());
         customer.setScore(frontScore);
 
-        //TODO 对创建人赋值
+        //对创建人赋值
+        Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(customer.getLoginAccount());
+        if (customerByRedis != null) {
+            customer.setCreatedBy(customer.getUserAccount());
+        } else {
+            customer.setCreatedBy("admin");
+        }
 
-        methodUtils.getCreatedBy(customer.getLoginAccount());
 
         //入库操作
         int res = customerMapper.addCustomer(customer);
@@ -81,7 +87,7 @@ public class CustomerServiceImpl {
         }
     }
 
-
+    @Override
     public ResponseVo login(Customer customer) {
 
         /*登陆: (1) 1: pc端的登陆 2 : app的登陆
@@ -120,13 +126,13 @@ public class CustomerServiceImpl {
             //返回前台登陆的用户信息
             responseVo.setData(customerByDb);
             //保存用户信息到redis
-            methodUtils.setLoginInfo(customerByDb.getUserAccount(),customerByDb);
+            redisTemplate.opsForValue().set(customerByDb.getUserAccount(), customerByDb);
             return responseVo;
         }
         return responseVo;
     }
 
-
+    @Override
     public ResponseVo loginOut(String userAccount) {
         //定义返回值
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "退出失败");
@@ -134,7 +140,7 @@ public class CustomerServiceImpl {
             responseVo.setMsg("用户信息不完整，退出失败! ");
             return responseVo;
         }
-        Boolean result = methodUtils.deleteKey(userAccount);
+        Boolean result = redisTemplate.delete(userAccount);
         if (result) {
             responseVo.setMsg("退出成功! ");
             responseVo.setSuccess(true);
@@ -145,7 +151,7 @@ public class CustomerServiceImpl {
     }
 
     //列表查询
-
+    @Override
     public ResponseVo listCustomers(Customer customer) {
         ResponseVo responseVo = new ResponseVo(true, ErrorCode.SUCCESS, "查询成功！");
         //添加分页
@@ -158,7 +164,7 @@ public class CustomerServiceImpl {
     }
 
     //单个查询
-
+    @Override
     public ResponseVo findCustomerById(Integer id) {
         ResponseVo responseVo = new ResponseVo(true, ErrorCode.SUCCESS, "查询成功！");
         //判断前端是否传id值
@@ -180,7 +186,7 @@ public class CustomerServiceImpl {
         return responseVo;
     }
 
-
+    @Override
     public ResponseVo updateCustomerById(Customer customer) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败");
         Customer customerByDb = customerMapper.findCustomerByPhoneAndAccountExOwn(customer);
@@ -192,9 +198,13 @@ public class CustomerServiceImpl {
         BigDecimal frontScore = new BigDecimal(customer.getFrontScore());
         customer.setScore(frontScore);
 
-        //TODO 对修改人赋值
-        methodUtils.getCreatedBy(customer.getLoginAccount());
-
+        //对修改人赋值
+        Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(customer.getLoginAccount());
+        if (customerByRedis != null) {
+            customer.setUpdatedBy(customer.getUserAccount());
+        } else {
+            customer.setUpdatedBy("admin");
+        }
         int result = customerMapper.updateCustomerById(customer);
         //入库操作
         if (result == 1) {
@@ -206,7 +216,7 @@ public class CustomerServiceImpl {
         return responseVo;
     }
 
-
+    @Override
     public ResponseVo deleteCustomerById(Integer id) {
         ResponseVo responseVo = new ResponseVo(true, ErrorCode.SUCCESS, "删除成功！");
         //判断前端是否传id值
@@ -228,7 +238,7 @@ public class CustomerServiceImpl {
         return responseVo;
     }
 
-
+    @Override
     public ResponseVo updatePwdById(String originPwd, String newPwd, Integer userId, String userAccount) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败！");
         if (StringUtils.isEmpty(originPwd) || StringUtils.isEmpty(newPwd) || userId == null || StringUtils.isEmpty(userAccount)) {
@@ -252,10 +262,12 @@ public class CustomerServiceImpl {
         HashMap<Object, Object> map = new HashMap<>();
         map.put("newPwd", newPassword);
         map.put("userId", userId);
-        //TODO 对修改人赋值
-        String createdBy = methodUtils.getCreatedBy(userAccount);
-        map.put("userAccount", createdBy);
-
+        Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(userAccount);
+        if (customerByRedis != null) {
+            map.put("userAccount", customerByRedis.getUserAccount());
+        } else {
+            map.put("userAccount", "admin");
+        }
         int result = customerMapper.updatePwdById(map);
         if (result == 1) {
             responseVo.setMsg("密码修改成功！");
@@ -267,7 +279,7 @@ public class CustomerServiceImpl {
         return responseVo;
     }
 
-
+    @Override
     public ResponseVo updateScore(String frontScore, Integer userId, String userAccount) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败！");
         if (StringUtils.isEmpty(frontScore) || userId == null || StringUtils.isEmpty(userAccount)) {

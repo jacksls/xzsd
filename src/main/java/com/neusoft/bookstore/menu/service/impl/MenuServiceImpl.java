@@ -142,7 +142,7 @@ public class MenuServiceImpl implements MenuService {
             responseVo.setMsg("请登录后重试！");
             return responseVo;
         }
-        // 1:校验統一层級菜单名称不重复
+        //校验同一层级菜单名称不重复
         Menu menuByDb = menuMapper.findMenuByParentMenuCodeAndName(menu);
         if(menuByDb!=null){
             //证明当前层级有重复的菜单名称

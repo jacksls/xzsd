@@ -132,7 +132,9 @@
     </select>
 
     <update id="deleteMenuByCode" parameterType="string">
-        update t_sys_menu set is_delete=1 where menu_code=#{menuCode} and is_delete=0
+        update t_sys_menu
+        set is_delete=1
+        where menu_code=#{menuCode} and is_delete=0
     </update>
 
 </mapper>

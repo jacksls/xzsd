@@ -51,6 +51,9 @@
          <if test="userName!=null and userName!=''">
             and user_name like concat('%',#{userName},'%')
         </if>
+        <if test="is_admin!=null">
+            and is_admin = #{isAdmin}
+        </if>
 
     </select>
 

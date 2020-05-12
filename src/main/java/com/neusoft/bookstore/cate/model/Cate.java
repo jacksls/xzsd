@@ -14,7 +14,7 @@ public class Cate extends BaseModel {
     @ApiModelProperty("分类名称")
     private String cateName;
 
-    @ApiModelProperty("分类编码名称")
+    @ApiModelProperty("分类编码")
     private String cateCode;
 
     @ApiModelProperty("备注")
@@ -22,5 +22,8 @@ public class Cate extends BaseModel {
 
     @ApiModelProperty("父级分类编码")
     private String parentCateCode;
+
+    @ApiModelProperty("创建子级时，前端点击分类的分类编码")
+    private String frontCateCode;
 
 }
