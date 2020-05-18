@@ -51,7 +51,7 @@
          <if test="userName!=null and userName!=''">
             and user_name like concat('%',#{userName},'%')
         </if>
-        <if test="is_admin!=null">
+        <if test="isAdmin!=null">
             and is_admin = #{isAdmin}
         </if>
 
@@ -100,9 +100,13 @@
     <update id="updateScore" parameterType="map">
         update t_sys_customer
         set score=#{frontScore}
-        ,updated_time=now()
-        ,updated_by=#{userAccount}
-        where id = #{userId}
+        <if test="userAccount!=null and userAccount!=''">
+            ,updated_time=now()
+            ,updated_by=#{userAccount}
+        </if>
+        where
+            is_delete = 0
+        and id = #{userId}
     </update>
 
 </mapper>

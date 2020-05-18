@@ -8,9 +8,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Liang
@@ -28,7 +28,7 @@ public class PictureController {
      */
     @ApiOperation(value ="轮播图新增",notes = "轮播图新增")
     @PostMapping("addPic")
-    public ResponseVo addPic(Picture picture){
+    public ResponseVo addPic(@RequestBody Picture picture){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -47,7 +47,7 @@ public class PictureController {
      */
     @ApiOperation(value ="轮播图列表查询",notes = "轮播图列表查询")
     @PostMapping("listPic")
-    public ResponseVo listPic(Picture picture){
+    public ResponseVo listPic(@RequestBody Picture picture){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -66,7 +66,7 @@ public class PictureController {
      */
     @ApiOperation(value ="轮播图启用、禁用、删除",notes = "轮播图启用、禁用、删除")
     @PostMapping("updatePic")
-    public ResponseVo updatePic(Picture picture){
+    public ResponseVo updatePic(@RequestBody Picture picture){
 
         ResponseVo responseVo = new ResponseVo();
         try {

@@ -166,7 +166,7 @@ public class CateServiceImpl implements CateService {
     }
 
     @Override
-    public ResponseVo findCateByParentCode(String cateCode) {
+    public ResponseVo findCateByCateCode(String cateCode) {
         /*
         级联既要获取一级分类 又要根据一级加载对应二级分类
         加载一级分类: cateCode=null或者=''加载一级分类

@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.neusoft.bookstore.customer.mapper.CustomerMapper;
 import com.neusoft.bookstore.customer.model.Customer;
 import com.neusoft.bookstore.customer.service.CustomerService;
+import com.neusoft.bookstore.shoppingcar.mapper.ShoppingCarMapper;
 import com.neusoft.bookstore.util.ErrorCode;
 import com.neusoft.bookstore.util.MD5Util;
 import com.neusoft.bookstore.util.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -30,6 +32,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
+    @Autowired
+    private ShoppingCarMapper shoppingCarMapper;
 
     @Override
     public ResponseVo addCustomer(Customer customer) {
@@ -195,6 +199,7 @@ public class CustomerServiceImpl implements CustomerService {
             return responseVo;
         }
 
+        //处理前端传过来的积分类型转换
         BigDecimal frontScore = new BigDecimal(customer.getFrontScore());
         customer.setScore(frontScore);
 
@@ -216,6 +221,7 @@ public class CustomerServiceImpl implements CustomerService {
         return responseVo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseVo deleteCustomerById(Integer id) {
         ResponseVo responseVo = new ResponseVo(true, ErrorCode.SUCCESS, "删除成功！");
@@ -234,7 +240,8 @@ public class CustomerServiceImpl implements CustomerService {
             responseVo.setSuccess(false);
             return responseVo;
         }
-
+        //删除和这个用户相关的购物车记录
+        shoppingCarMapper.deleteCarById(id);
         return responseVo;
     }
 

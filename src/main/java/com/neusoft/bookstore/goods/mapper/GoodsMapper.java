@@ -40,4 +40,6 @@ public interface GoodsMapper {
     void addImages(GoodsImage goodsImage);
 
     List<Goods> listGoods(Goods goods);
+
+    void updateGoodsStoreAndSaleNum(Map<Object, Object> map);
 }

@@ -102,7 +102,6 @@ public class PictureServiceImpl implements PictureService {
             responseVo.setMsg("操作成功！");
             responseVo.setSuccess(true);
             responseVo.setCode(ErrorCode.SUCCESS);
-
         }
         return responseVo;
     }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2020/4/30 20:31
  */
 
-@Api("")
+@Api("cate")
 @RequestMapping("cate")
 @RestController
 public class CateController {
@@ -29,7 +29,7 @@ public class CateController {
      */
     @ApiOperation(value ="新增分类",notes = "新增分类")
     @PostMapping("addCate")
-    public ResponseVo addCate(Cate cate){
+    public ResponseVo addCate(@RequestBody Cate cate){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -86,7 +86,7 @@ public class CateController {
      */
     @ApiOperation(value ="修改分类信息",notes = "修改分类信息")
     @PostMapping ("updateCateByCode")
-    public ResponseVo updateCateByCode(Cate cate){
+    public ResponseVo updateCateByCode(@RequestBody Cate cate){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = cateService.updateCateByCode(cate);
@@ -122,12 +122,12 @@ public class CateController {
      * 级联查询
      */
     @ApiOperation(value ="级联查询",notes = "级联查询")
-    @GetMapping("findCateByParentCode")
-    public ResponseVo findCateByParentCode(String cateCode){
+    @GetMapping("findCateByCateCode")
+    public ResponseVo findCateByCateCode(String cateCode){
 
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = cateService.findCateByParentCode(cateCode);
+            responseVo = cateService.findCateByCateCode(cateCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);

@@ -82,6 +82,7 @@
     <update id="updateTypeAndUrlByCode" parameterType="string">
         update t_sys_menu set type=1, menu_url=null where menu_code=#{menuCode} and is_delete=0
     </update>
+
     <update id="updateMenuByCode" parameterType="com.neusoft.bookstore.menu.model.Menu">
         update t_sys_menu
         set menu_name=#{menuName},

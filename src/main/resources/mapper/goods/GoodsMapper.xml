@@ -5,31 +5,30 @@
 <mapper namespace="com.neusoft.bookstore.goods.mapper.GoodsMapper">
 
     <resultMap id="baseMap" type="com.neusoft.bookstore.goods.model.Goods">
-        <id column="id" property="id"></id>
-        <result column="sku_name" property="skuName"></result>
-        <result column="isbn" property="isbn"></result>
-        <result column="first_cate_code" property="firstCateCode"></result>
-        <result column="second_cate_code" property="secondCateCode"></result>
-        <result column="sku_ad" property="skuAd"></result>
-        <result column="sku_introduction" property="skuIntroduction"></result>
-        <result column="business_code" property="businessCode"></result>
-        <result column="store_num" property="storeNum"></result>
-        <result column="cost_price" property="costPrice"></result>
-        <result column="sale_price" property="salePrice"></result>
-        <result column="sku_status" property="skuStatus"></result>
-        <result column="sku_code" property="skuCode"></result>
-        <result column="sale_num" property="saleNum"></result>
-        <result column="sale_time" property="saleTime"></result>
-        <result column="is_delete" property="isDelete"></result>
-        <result column="created_time" property="createdTime"></result>
-        <result column="created_by" property="createdBy"></result>
-        <result column="updated_time" property="updatedTime"></result>
-        <result column="updated_by" property="updatedBy"></result>
-
-        <result column="firstCateName" property="firstCateName"></result>
-        <result column="secondCateName" property="secondCateName"></result>
-        <result column="businessName" property="businessName"></result>
-        <result column="skuStatusName" property="updatedBy"></result>
+        <id column="id" property="id"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="isbn" property="isbn"/>
+        <result column="first_cate_code" property="firstCateCode"/>
+        <result column="second_cate_code" property="secondCateCode"/>
+        <result column="sku_ad" property="skuAd"/>
+        <result column="sku_introduction" property="skuIntroduction"/>
+        <result column="business_code" property="businessCode"/>
+        <result column="store_num" property="storeNum"/>
+        <result column="cost_price" property="costPrice"/>
+        <result column="sale_price" property="salePrice"/>
+        <result column="sku_status" property="skuStatus"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sale_num" property="saleNum"/>
+        <result column="sale_time" property="saleTime"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="firstCateName" property="firstCateName"/>
+        <result column="secondCateName" property="secondCateName"/>
+        <result column="businessName" property="businessName"/>
+        <result column="skuStatusName" property="updatedBy"/>
     </resultMap>
 
 
@@ -185,7 +184,7 @@
         </if>
     </select>
 
-    <select id="findImagesBySkuCode" resultType="java.lang.String" parameterType="string">
+    <select id="findImagesBySkuCode" resultType="string" parameterType="string">
         select
             sku_images_path skuImagePath
         from
@@ -269,6 +268,18 @@
             sku_status=#{status},
             updated_time=now(),
             updated_by=#{updatedBy}
+        where
+            is_delete=0
+        and sku_code=#{skuCode}
+
+    </update>
+
+    <update id="updateGoodsStoreAndSaleNum" parameterType="map">
+        update
+            t_sys_goods
+        set
+            store_num=store_num-#{shopNum},
+            sale_num=sale_num+#{shopNum}
         where
             is_delete=0
         and sku_code=#{skuCode}

@@ -7,10 +7,7 @@ import com.neusoft.bookstore.util.ResponseVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Liang
@@ -27,7 +24,7 @@ public class CustomerController {
 
     @ApiOperation(value = "注册新增用户", notes = "app端和pc端新用户注册")
     @PostMapping("addCustomer")
-    private ResponseVo addCustomer(Customer customer){
+    private ResponseVo addCustomer(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = customerService.addCustomer(customer);
@@ -42,7 +39,7 @@ public class CustomerController {
 
     @ApiOperation(value = "用户登录", notes = "app端和pc端用户登录")
     @PostMapping("login")
-    private ResponseVo login(Customer customer){
+    private ResponseVo login(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = customerService.login(customer);
@@ -73,7 +70,7 @@ public class CustomerController {
 
     @ApiOperation(value = "用户列表查询", notes = "用户列表查询")
     @PostMapping("listCustomers")
-    private ResponseVo listCustomers(Customer customer){
+    private ResponseVo listCustomers(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = customerService.listCustomers(customer);
@@ -103,7 +100,7 @@ public class CustomerController {
 
     @ApiOperation(value = "根据用户id修改用户信息", notes = "根据用户id修改用户信息")
     @PostMapping("updateCustomerById")
-    private ResponseVo updateCustomerById(Customer customer){
+    private ResponseVo updateCustomerById(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = customerService.updateCustomerById(customer);

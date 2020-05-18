@@ -11,12 +11,12 @@ import lombok.Data;
 @Data
 public class Picture extends BaseModel {
 
-    @ApiModelProperty("图片路轻")
+    @ApiModelProperty("图片路路径")
     private String picUrL;
 
     @ApiModelProperty("图片状态  1:启用  2:禁用")
     private Integer picStatus;
 
-    @ApiModelProperty("图片路轻")
+    @ApiModelProperty("图片状态名称")
     private String picStatusName;
 }

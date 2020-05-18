@@ -11,4 +11,8 @@ import com.neusoft.bookstore.util.ResponseVo;
 public interface ShoppingCarService {
 
     ResponseVo addShoppingCar(ShoppingCar shoppingCar);
+
+    ResponseVo findGoodsFromCar(Integer userId, Integer pageSize, Integer pageNum);
+
+    ResponseVo deleteGoodsFromCar(ShoppingCar shoppingCar);
 }

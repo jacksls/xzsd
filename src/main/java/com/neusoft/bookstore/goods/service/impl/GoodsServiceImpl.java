@@ -281,13 +281,13 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseVo updateGoodsInfo(Goods goods) {
-        /*1 :需要校验登陆
+        /*1 :需要校验登录
         2 :校验商品不能重复:同一个商家，同个分类。同个isbn是否有相同的商品名称(排除自己)
         3:处理:售价和定价 (数据格式转换)
         4:处理图片:页面多张图片。集合接收图片(地址保存数据库) (*)
         5:商品和图片两张表:修改商品在增图片(事务) (过skuCode)*/
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败!");
-        //需要校验登陆
+        //需要校验登录
         Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(goods.getLoginAccount());
         String createBy = "";
         if (customerByRedis != null) {
@@ -295,7 +295,7 @@ public class GoodsServiceImpl implements GoodsService {
             createBy = customerByRedis.getUserAccount();
             goods.setUpdatedBy(createBy);
         } else {
-            //提示需要登陆
+            //提示需要登录
             responseVo.setMsg("请登陆后重试! ");
             return responseVo;
         }
@@ -377,20 +377,22 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public ResponseVo updateGoodStatus(String skuCode, String loginAccount, String status) {
-        /*1:先校验登陆
+        /*
+        1:先校验登录
         2 :校验skuCode、 stotus (传值是否是1或0)是否存在
-        3 :根据s kuCode去更新*/
+        3 :根据skuCode去更新
+        */
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败!");
         if (StringUtils.isEmpty(skuCode) || StringUtils.isEmpty(loginAccount)) {
             responseVo.setMsg("信息不完整!");
             return responseVo;
         }
-        //登陆
+        //登录
         String updatedBy = "";
         Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(loginAccount);
         if (customerByRedis == null) {
-            //提示需要登陆
-            responseVo.setMsg("请登陆后重试! ");
+            //提示需要登录
+            responseVo.setMsg("请登录后重试! ");
             return responseVo;
         } else {
             updatedBy = customerByRedis.getUserAccount();

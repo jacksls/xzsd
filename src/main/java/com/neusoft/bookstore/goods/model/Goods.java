@@ -36,7 +36,7 @@ public class Goods extends BaseModel {
     private String businessCode;
 
     @ApiModelProperty("商品库存")
-    private String storeNum;
+    private Integer storeNum;
 
     @ApiModelProperty("定价")
     private BigDecimal costPrice;
@@ -45,13 +45,13 @@ public class Goods extends BaseModel {
     private BigDecimal salePrice;
 
     @ApiModelProperty("商品状态（0:在售  1:已下架  2:未发布）")
-    private String skuStatus;
+    private Integer skuStatus;
 
     @ApiModelProperty("商品编码")
     private String skuCode;
 
     @ApiModelProperty("商品的销售数量")
-    private String saleNum;
+    private Integer saleNum;
 
     @ApiModelProperty("商品的商上架时间")
     private String saleTime;

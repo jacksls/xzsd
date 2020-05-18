@@ -4,6 +4,9 @@ import com.neusoft.bookstore.util.BaseModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * @author Liang
  * @date 2020/5/12 9:27
@@ -23,4 +26,12 @@ public class ShoppingCar extends BaseModel {
     @ApiModelProperty ("app登陆用户id")
     private Integer orderUserId;
 
+    @ApiModelProperty("商品名称")
+    private String skuName ;
+
+    @ApiModelProperty("售价")
+    private BigDecimal salePrice;
+
+    @ApiModelProperty("商品图片")
+    private List<String> images;
 }

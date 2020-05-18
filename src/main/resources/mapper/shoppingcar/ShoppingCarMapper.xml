@@ -10,11 +10,13 @@
         <result column="shop_num" property="shopNum"/>
         <result column="business_code" property="businessCode"/>
         <result column="order_user_id" property="orderUserId"/>
-        <result column="is_delete" property="isDelete"></result>
-        <result column="created_by" property="createdBy"></result>
-        <result column="created_time" property="createdTime"></result>
-        <result column="updated_by" property="updatedBy"></result>
-        <result column="updated_time" property="updatedTime"></result>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="sale_price" property="salePrice"/>
     </resultMap>
 
     <select id="findGoodsFromCar" resultType="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
@@ -37,4 +39,75 @@
         AND business_code=#{businessCode}
         AND order_user_id=#{orderUserId}
     </select>
+
+    <insert id="addShoppingCar" parameterType="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
+        insert into t_sys_shopping_car(
+            sku_code,
+            shop_num,
+            business_code,
+            order_user_id,
+            is_delete,
+            created_by,
+            created_time
+        ) values (
+            #{skuCode},
+            1,
+            #{businessCode},
+            #{orderUserId},
+            0,
+            #{createdBy},
+            now()
+        )
+    </insert>
+
+    <update id="updateShoppingCar" parameterType="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
+        update t_sys_shopping_car
+        set
+            shop_num=#{shopNum},
+            updated_by=#{updatedBy},
+            updated_time=now()
+        where
+            is_delete=0
+        and sku_code=#{skuCode}
+        and business_code=#{businessCode}
+        and order_user_id=#{orderUserId}
+    </update>
+
+    <select id="listGoodsFromCar" parameterType="integer" resultMap="baseMap">
+        SELECT
+            tssc.sku_code,
+            tssc.shop_num,
+            tssc.business_code,
+            tssc.order_user_id,
+            tssc.id,
+            tssc.is_delete,
+            tssc.created_time,
+            tssc.created_by,
+            tssc.updated_time,
+            tssc.updated_by,
+            tsg.sku_name,
+            tsg.sale_price
+        FROM
+            t_sys_shopping_car tssc INNER JOIN t_sys_goods tsg ON tssc.sku_code=tsg.sku_code
+        WHERE
+            tssc.is_delete=0
+        and order_user_id=#{userId}
+
+    </select>
+
+    <delete id="deleteGoodsFromCar" parameterType="com.neusoft.bookstore.shoppingcar.model.ShoppingCar">
+        delete from t_sys_shopping_car
+        where
+            is_delete=0
+        and sku_code=#{skuCode}
+        and order_user_id=#{orderUserId}
+        and business_code=#{businessCode}
+    </delete>
+
+    <delete id="deleteCarById" parameterType="integer">
+        delete from t_sys_shopping_car
+        where
+            is_delete=0
+        and order_user_id=#{id}
+    </delete>
 </mapper>

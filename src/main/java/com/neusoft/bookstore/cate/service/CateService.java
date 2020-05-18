@@ -18,6 +18,7 @@ public interface CateService {
 
     ResponseVo listCateTree();
 
-    ResponseVo findCateByParentCode(String cateCode);
+    ResponseVo findCateByCateCode(String cateCode);
+
 
 }

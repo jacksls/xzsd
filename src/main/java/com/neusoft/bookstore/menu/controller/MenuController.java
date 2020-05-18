@@ -7,10 +7,7 @@ import com.neusoft.bookstore.menu.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Liang
@@ -26,7 +23,7 @@ public class MenuController {
 
     @ApiOperation(value = "新增菜单", notes = "新增菜单")
     @PostMapping("addMenu")
-    private ResponseVo addMenu(Menu menu){
+    private ResponseVo addMenu(@RequestBody Menu menu){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = menuService.addMenu(menu);
@@ -74,7 +71,7 @@ public class MenuController {
 
     @ApiOperation(value = "修改菜单信息", notes = "修改菜单信息")
     @PostMapping("updateMenuByCode")
-    private ResponseVo updateMenuByCode(Menu menu){
+    private ResponseVo updateMenuByCode(@RequestBody Menu menu){
         ResponseVo responseVo = new ResponseVo();
         try {
             responseVo = menuService.updateMenuByCode(menu);

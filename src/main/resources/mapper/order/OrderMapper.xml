@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neusoft.bookstore.order.mapper.OrderMapper">
+
+    <resultMap id="orderMap" type="com.neusoft.bookstore.order.model.Order">
+        <id column="id" property="id"/>
+        <result column="order_code" property="orderCode"/>
+        <result column="business_code" property="businessCode"/>
+        <result column="order_user_id" property="orderUserId"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="pay_status" property="payStatus"/>
+        <result column="order_amount" property="orderAmount"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+
+        <result column="user_name" property="userName"/>
+        <result column="phone" property="phone"/>
+        <result column="order_status_name" property="orderStatusName"/>
+        <result column="pay_status_name" property="payStatusName"/>
+    </resultMap>
+
+    <resultMap id="orderDetailMap" type="com.neusoft.bookstore.order.model.OrderDetail">
+        <id column="id" property="id"/>
+        <result column="order_code" property="orderCode"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="shop_num" property="shopNum"/>
+        <result column="sku_amount" property="skuAmount"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="cost_price" property="costPrice"/>
+        <result column="sale_price" property="salePrice"/>
+    </resultMap>
+
+    <insert id="addOrderDetail" parameterType="com.neusoft.bookstore.order.model.OrderDetail">
+        insert into t_sys_order_details(
+            order_code,
+            sku_code,
+            shop_num,
+            sku_amount,
+            is_delete,
+            created_by,
+            created_time
+        )values(
+            #{orderCode},
+            #{skuCode},
+            #{shopNum},
+            #{skuAmount},
+            0,
+            #{createdBy},
+            now()
+        )
+    </insert>
+
+    <insert id="addOrder" parameterType="com.neusoft.bookstore.order.model.Order">
+        insert into t_sys_order (
+            order_code,
+            business_code,
+            order_user_id,
+            order_status,
+            pay_status,
+            order_amount,
+            is_delete,
+            created_by,
+            created_time
+        )values (
+            #{orderCode},
+            #{businessCode},
+            #{orderUserId},
+            #{orderStatus},
+            #{payStatus},
+            #{orderAmount},
+            0,
+            #{orderUserId},
+            now()
+        )
+    </insert>
+
+    <select id="listOrder" parameterType="com.neusoft.bookstore.order.model.Order" resultMap="orderMap">
+        SELECT
+            tso.order_code,
+            tso.business_code,
+            tso.order_user_id,
+            tso.order_status,
+            CASE
+                WHEN tso.order_status=0 then '已下单'
+                WHEN tso.order_status=1 then '已发货'
+                WHEN tso.order_status=2 then '已完成未评价'
+                WHEN tso.order_status=3 then '已评价'
+                WHEN tso.order_status=4 then '已取消'
+            END order_status_name,
+            CASE
+                WHEN tso.pay_status=0 then '未支付'
+                WHEN tso.pay_status=1 then '已支付'
+                WHEN tso.pay_status=2 then '退款中'
+                WHEN tso.pay_status=3 then '已退款'
+            END pay_status_name,
+            tso.pay_status,
+            tso.order_amount,
+            tsc.user_name,
+            tsc.phone,
+            tso.id,
+            tso.is_delete,
+            tso.created_by,
+            tso.created_time,
+            tso.updated_by,
+            tso.updated_time
+        FROM t_sys_order tso
+        INNER JOIN t_sys_customer tsc ON tso.order_user_id=tsc.id
+        WHERE
+            tso.is_delete=0
+        <if test="userName!=null and userName!=''">
+            and tsc.user_name like concat('%',#{userName},'%')
+        </if>
+        <if test="orderCode!=null and orderCode!=''">
+            and tso.order_code like concat('%',#{orderCode},'%')
+        </if>
+        <if test="phone!=null and phone!=''">
+            and tsc.phone like concat('%',#{phone},'%')
+        </if>
+        <if test="orderStatus!=null">
+            and tso.order_status like concat('%',#{orderStatus},'%')
+        </if>
+    </select>
+
+    <select id="findOrderDetailByOrderCode" parameterType="string" resultMap="orderDetailMap">
+        SELECT
+            tsod.order_code,
+            tsod.sku_code,
+            tsg.sku_name,
+            tsod.shop_num,
+            tsod.sku_amount,
+            tsg.cost_price,
+            tsg.sale_price,
+            tsod.id,
+            tsod.is_delete,
+            tsod.created_by,
+            tsod.created_time,
+            tsod.updated_by,
+            tsod.updated_time
+        FROM t_sys_order_details tsod
+        INNER JOIN t_sys_order tso ON tsod.order_code=tso.order_code
+        INNER JOIN t_sys_goods tsg ON tsod.sku_code=tsg.sku_code
+        WHERE tsod.is_delete=0
+        AND tsod.order_code=#{orderCode}
+    </select>
+
+    <select id="findOrdersByloginAccount" resultMap="orderDetailMap">
+         SELECT
+            tsod.order_code,
+            CASE
+                WHEN tso.pay_status=0 then '未支付'
+                WHEN tso.pay_status=1 then '已支付'
+                WHEN tso.pay_status=2 then '退款中'
+                WHEN tso.pay_status=3 then '已退款'
+            END pay_status_name,
+            tso.pay_status,
+            tsod.sku_code,
+            tsg.sku_name,
+            tsod.shop_num,
+            tsod.sku_amount,
+            tsg.cost_price,
+            tsg.sale_price,
+            tsod.id,
+            tsod.is_delete,
+            tsod.created_by,
+            tsod.created_time,
+            tsod.updated_by,
+            tsod.updated_time
+        FROM t_sys_order_details tsod
+        INNER JOIN t_sys_order tso ON tsod.order_code=tso.order_code
+        INNER JOIN t_sys_goods tsg ON tsod.sku_code=tsg.sku_code
+        INNER JOIN t_sys_customer tsc ON tsc.id=tso.order_user_id
+        WHERE tsod.is_delete=0
+        AND (phone=#{loginAccount} OR user_account=#{loginAccount})
+        AND tso.pay_status=#{payStatus}
+        GROUP BY tsod.order_code
+    </select>
+
+
+</mapper>

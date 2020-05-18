@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Liang
@@ -38,10 +37,11 @@ public class BaseModel implements Serializable {
     @ApiModelProperty("每页现实的条数")
     private Integer pageSize;
 
+
+
     @ApiModelProperty("获取从前台输入的用户账号或者是手机号")
     private String loginAccount;
 
-    public void setImages(List<String> goodImages) {
-
-    }
+    @ApiModelProperty("支付状态名称")
+    private String payStatusName;
 }

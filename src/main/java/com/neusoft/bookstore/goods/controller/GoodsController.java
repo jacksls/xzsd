@@ -8,10 +8,7 @@ import com.neusoft.bookstore.util.ResponseVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -51,7 +48,7 @@ public class GoodsController {
      */
     @ApiOperation(value ="图片上传",notes = "图片上传")
     @PostMapping("uploadImage")
-    public ResponseVo uploadImage(MultipartFile file){
+    public ResponseVo uploadImage(@RequestBody MultipartFile file){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -70,7 +67,7 @@ public class GoodsController {
      */
     @ApiOperation(value ="商品新增",notes = "商品新增")
     @PostMapping("addGoods")
-    public ResponseVo addGoods(Goods goods){
+    public ResponseVo addGoods(@RequestBody Goods goods){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -89,7 +86,7 @@ public class GoodsController {
      */
     @ApiOperation(value ="商品列表查询",notes = "商品列表查询")
     @PostMapping("listGoods")
-    public ResponseVo listGoods(Goods goods){
+    public ResponseVo listGoods(@RequestBody Goods goods){
 
         ResponseVo responseVo = new ResponseVo();
         try {
@@ -146,7 +143,7 @@ public class GoodsController {
      */
     @ApiOperation(value ="商品修改",notes = "商品修改")
     @PostMapping("updateGoodsInfo")
-    public ResponseVo updateGoodsInfo(Goods goods){
+    public ResponseVo updateGoodsInfo(@RequestBody Goods goods){
 
         ResponseVo responseVo = new ResponseVo();
         try {
