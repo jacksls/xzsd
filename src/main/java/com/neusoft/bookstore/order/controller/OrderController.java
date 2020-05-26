@@ -1,5 +1,7 @@
 package com.neusoft.bookstore.order.controller;
 
+import com.neusoft.bookstore.goods.model.Goods;
+import com.neusoft.bookstore.order.model.GoodsVo;
 import com.neusoft.bookstore.order.model.Order;
 import com.neusoft.bookstore.order.model.OrderVo;
 import com.neusoft.bookstore.order.service.OrderService;
@@ -29,7 +31,7 @@ public class OrderController {
      */
     @ApiOperation(value ="订单创建",notes = "订单创建")
     @PostMapping("addOrder")
-    public ResponseVo addOrder(@RequestBody List<OrderVo> orderVos){
+    public ResponseVo addOrder(@RequestBody OrderVo orderVos){
         ResponseVo responseVo = new ResponseVo();
         try {
             System.out.println(new Date() +"   调用订单创建接口！");

@@ -1,6 +1,7 @@
 package com.neusoft.bookstore.order.service;
 
 
+import com.neusoft.bookstore.order.model.GoodsVo;
 import com.neusoft.bookstore.order.model.Order;
 import com.neusoft.bookstore.order.model.OrderVo;
 import com.neusoft.bookstore.util.ResponseVo;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface OrderService {
 
-    ResponseVo addOrder(List<OrderVo> orderVos);
+    ResponseVo addOrder(OrderVo orderVos);
 
     ResponseVo listOrder(Order order);
 

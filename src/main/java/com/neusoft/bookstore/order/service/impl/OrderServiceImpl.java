@@ -8,6 +8,7 @@ import com.neusoft.bookstore.customer.model.Customer;
 import com.neusoft.bookstore.goods.mapper.GoodsMapper;
 import com.neusoft.bookstore.goods.model.Goods;
 import com.neusoft.bookstore.order.mapper.OrderMapper;
+import com.neusoft.bookstore.order.model.GoodsVo;
 import com.neusoft.bookstore.order.model.Order;
 import com.neusoft.bookstore.order.model.OrderDetail;
 import com.neusoft.bookstore.order.model.OrderVo;
@@ -53,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResponseVo addOrder(List<OrderVo> orderVos) {
+    public ResponseVo addOrder(OrderVo orderVos) {
         /*
         1:登录
         2:数据校验
@@ -65,12 +66,16 @@ public class OrderServiceImpl implements OrderService {
         */
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "创建失败");
         // 1:获取登录人
-        if (orderVos == null || orderVos.size() <= 0) {
+
+        //先把购买的商品取出来
+        List<GoodsVo> goodsVos = orderVos.getGoodsVos();
+
+        if (goodsVos == null || goodsVos.size() <= 0) {
             responseVo.setMsg("未购买任何商品");
             return responseVo;
         }
         //取出登录账号
-        String loginAccount = orderVos.get(0).getLoginAccount();
+        String loginAccount = orderVos.getLoginAccount();
         Integer userId = null;
         Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(loginAccount);
         if (customerByRedis != null) {
@@ -81,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
             responseVo.setMsg("请登录后重试! ");
             return responseVo;
         }
-        //先取出用户余额
+        //取出用户余额
         Customer customer = customerMappper.findCustomerById(userId);
         BigDecimal score = customer.getScore();
 
@@ -92,12 +97,12 @@ public class OrderServiceImpl implements OrderService {
         //先找出有多少个商家找个该商家下 有多个商品
         // 存放商家和对应的商品集合  key：商家code，value :商家对应的商品集合
         //java8流式写法
-        Map<String, List<OrderVo>> hashMap = orderVos.stream().collect(Collectors.groupingBy(OrderVo::getBusinessCode));
-        for (Map.Entry<String, List<OrderVo>> entry : hashMap.entrySet()) {
+        Map<String, List<GoodsVo>> hashMap = goodsVos.stream().collect(Collectors.groupingBy(GoodsVo::getBusinessCode));
+        for (Map.Entry<String, List<GoodsVo>> entry : hashMap.entrySet()) {
             //取出商家编码
             String bussinessCode = entry.getKey();
             //购买的商品集合
-            List<OrderVo> voList = entry.getValue();
+            List<GoodsVo> voList = entry.getValue();
             //计算订单总金额
             BigDecimal orderAmount = new BigDecimal(0.0);
             //生成订单编码
@@ -105,9 +110,9 @@ public class OrderServiceImpl implements OrderService {
             //处理订单详情
             for (int i = 0; i < voList.size(); i++) {
                 //业务逻辑校验: 商品状态，商品库存，用户余额
-                OrderVo orderVo = voList.get(i);
+                GoodsVo goodsVo = voList.get(i);
                 //商品状态，校验是否下架
-                Goods goodsBySkuCode = goodsMapper.findGoodsBySkuCode(orderVo.getSkuCode());
+                Goods goodsBySkuCode = goodsMapper.findGoodsBySkuCode(goodsVo.getSkuCode());
                 if (goodsBySkuCode == null || goodsBySkuCode.getSkuStatus() != 0) {
                     //商品不满足购买条件
                     /*responseVo.setMsg("商品已经下架，无法购买！");
@@ -115,13 +120,13 @@ public class OrderServiceImpl implements OrderService {
                     throw new GoodsInfoException("商品已经下架，无法购买！");
                 }
                 //校验商品库存
-                if (orderVo.getShopNum() > goodsBySkuCode.getStoreNum()) {
+                if (goodsVo.getShopNum() > goodsBySkuCode.getStoreNum()) {
                     /*responseVo.setMsg("商品库存不足，无法购买！");
                     return responseVo;*/
                     throw new GoodsInfoException("商品库存不足，无法购买！");
                 }
                 //用户余额,先计算每种商品的总价格:售价*数量
-                BigDecimal skuAmount = goodsBySkuCode.getSalePrice().multiply(new BigDecimal(orderVo.getShopNum()));
+                BigDecimal skuAmount = goodsBySkuCode.getSalePrice().multiply(new BigDecimal(goodsVo.getShopNum()));
                 //计算订单价格
                 orderAmount = orderAmount.add(skuAmount);
                 //总价
@@ -135,21 +140,21 @@ public class OrderServiceImpl implements OrderService {
                 //创建订单详情
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setOrderCode(orderCode);
-                orderDetail.setShopNum(orderVo.getShopNum());
-                orderDetail.setSkuCode(orderVo.getSkuCode());
+                orderDetail.setShopNum(goodsVo.getShopNum());
+                orderDetail.setSkuCode(goodsVo.getSkuCode());
                 orderDetail.setSkuAmount(skuAmount);
                 orderDetail.setCreatedBy(loginAccount);
                 orderMapper.addOrderDetail(orderDetail);
 
                 //需要减少商品库存，增加商品的销售数量
                 Map<Object, Object> map = new HashMap<>();
-                map.put("skuCode", orderVo.getSkuCode());
-                map.put("shopNum", orderVo.getShopNum());
+                map.put("skuCode", goodsVo.getSkuCode());
+                map.put("shopNum", goodsVo.getShopNum());
                 goodsMapper.updateGoodsStoreAndSaleNum(map);
 
                 //删除购物车相应的商品
                 ShoppingCar shoppingCar = new ShoppingCar();
-                shoppingCar.setSkuCode(orderVo.getSkuCode());
+                shoppingCar.setSkuCode(goodsVo.getSkuCode());
                 shoppingCar.setBusinessCode(bussinessCode);
                 shoppingCar.setOrderUserId(userId);
                 shoppingCarMapper.deleteGoodsFromCar(shoppingCar);

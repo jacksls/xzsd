@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author Liang
  * @date 2020/5/13 11:34
@@ -23,11 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderVo extends BaseModel {
 
-    //新建订单时接收前端传值的参数
-
-    private String skuCode;
-    private String businessCode ;
-    private Integer shopNum ;
+    private  List<GoodsVo> goodsVos;
     private String loginAccount;
 
 }
