@@ -265,7 +265,7 @@
         update
             t_sys_goods
         set
-            sku_status=#{status},
+            sku_status=#{skuStatus},
             updated_time=now(),
             updated_by=#{updatedBy}
         where

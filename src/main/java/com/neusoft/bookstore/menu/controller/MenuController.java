@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * @author Liang
  * @date 2020/4/27 10:54
@@ -26,6 +28,7 @@ public class MenuController {
     private ResponseVo addMenu(@RequestBody Menu menu){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用新增菜单接口！");
             responseVo = menuService.addMenu(menu);
         } catch (Exception e) {
             //处理异常提示前台服务端有异常
@@ -42,6 +45,7 @@ public class MenuController {
     private ResponseVo listMenuTree(){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用菜单树查询接口！");
             responseVo = menuService.listMenuTree();
         } catch (Exception e) {
             //处理异常提示前台服务端有异常
@@ -58,6 +62,7 @@ public class MenuController {
     private ResponseVo findMenuByCode(String menuCode){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用菜单详情查询接口！");
             responseVo = menuService.findMenuByCode(menuCode);
         } catch (Exception e) {
             //处理异常提示前台服务端有异常
@@ -74,6 +79,7 @@ public class MenuController {
     private ResponseVo updateMenuByCode(@RequestBody Menu menu){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用修改菜单信息接口！");
             responseVo = menuService.updateMenuByCode(menu);
         } catch (Exception e) {
             //处理异常提示前台服务端有异常
@@ -90,6 +96,7 @@ public class MenuController {
     private ResponseVo deleteMenuByCode(String menuCode){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用删除菜单信息接口！");
             responseVo = menuService.deleteMenuByCode(menuCode);
         } catch (Exception e) {
             //处理异常提示前台服务端有异常

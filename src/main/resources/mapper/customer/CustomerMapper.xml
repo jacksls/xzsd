@@ -69,7 +69,7 @@
         FROM t_sys_customer WHERE is_delete = 0 AND (phone = #{phone} OR user_account = #{userAccount}) AND id != #{id}
     </select>
 
-    <update id="updateCustomerById">
+    <update id="updateCustomer">
         update t_sys_customer
         set user_account=#{userAccount}
         ,user_name=#{userName}
@@ -90,7 +90,7 @@
         where id = #{id}
     </update>
 
-    <update id="updatePwdById" parameterType="map">
+    <update id="updatePwd" parameterType="map">
         update t_sys_customer
         set password = #{newPwd}
         ,updated_time=now()
@@ -106,7 +106,7 @@
         </if>
         where
             is_delete = 0
-        and id = #{userId}
+        and id = #{id}
     </update>
 
 </mapper>

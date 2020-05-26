@@ -4,13 +4,13 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/xzsd?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://39.105.61.103:3306/xzsd?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
     username: root
     password: 552552
     druid:
       initialSize: 1
       minIdle: 1
-      maxActive: 20
+      maxActive: 100
       maxWait: 60000
       validationQuery: select 'x' from dual
       timeBetweenEvictionRunsMillis: 60000
@@ -20,8 +20,9 @@ spring:
       testOnReturn: false
       filters: stat,slf4j
   redis:
-    host: 127.0.0.1
+    host: 39.105.61.103
     port: 6379
+
 #mybatis
 mybatis:
   mapper-locations: classpath:mapper/**/*Mapper.xml

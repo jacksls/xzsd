@@ -13,6 +13,8 @@ import java.util.Date;
 @Data
 public class BaseModel implements Serializable {
 
+    private static final long serialVersionUID = -6743567631108323096L;
+
     @ApiModelProperty("主键id")
     private Integer id;
 

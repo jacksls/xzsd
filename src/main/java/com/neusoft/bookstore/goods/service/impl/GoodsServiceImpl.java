@@ -376,7 +376,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public ResponseVo updateGoodStatus(String skuCode, String loginAccount, String status) {
+    public ResponseVo updateGoodStatus(String skuCode, String loginAccount, String skuStatus) {
         /*
         1:先校验登录
         2 :校验skuCode、 stotus (传值是否是1或0)是否存在
@@ -398,11 +398,11 @@ public class GoodsServiceImpl implements GoodsService {
             updatedBy = customerByRedis.getUserAccount();
         }
         //status (传值是否是1或0)
-        if (!"0".equals(status) && !"1".equals(status)) {
+        if (!"0".equals(skuStatus) && !"1".equals(skuStatus)) {
             responseVo.setMsg("商品状态不正确! ");
             return responseVo;
         }
-        int result = goodsMapper.updateGoodStatus(skuCode, updatedBy, status);
+        int result = goodsMapper.updateGoodStatus(skuCode, updatedBy, skuStatus);
         if (result == 1) {
             responseVo.setMsg("修改成功! ");
             responseVo.setSuccess(true);

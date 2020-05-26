@@ -31,7 +31,8 @@
             updated_time
         from
             t_sys_cate
-        where is_delete=0
+        where
+        is_delete=0
         and cate_name=#{cateName}
         <if test="parentCateCode!=null and parentCateCode!=''">
             and parent_cate_code=#{parentCateCode}
@@ -76,6 +77,8 @@
             updated_time
         from
             t_sys_cate
+        where
+           is_delete=0
     </select>
 
     <select id="findCateByCateCode" parameterType="string" resultMap="baseMap">
@@ -93,7 +96,8 @@
         from
             t_sys_cate
         where
-            cate_code=#{cateCod}
+            is_delete=0
+        and cate_code=#{cateCode}
     </select>
 
     <update id="updateCateByCode" parameterType="com.neusoft.bookstore.cate.model.Cate">

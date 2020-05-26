@@ -24,7 +24,7 @@ public interface CateMapper {
 
     int updateCateByCode(Cate cate);
 
-    List<Menu> findChildCates(String cateCode);
+    List<Cate> findChildCates(String cateCode);
 
     int deleteCateByCode(String cateCode);
 

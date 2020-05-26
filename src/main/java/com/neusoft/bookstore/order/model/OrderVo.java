@@ -1,5 +1,6 @@
 package com.neusoft.bookstore.order.model;
 
+import com.neusoft.bookstore.util.BaseModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor       //无参构造
 @AllArgsConstructor
-public class OrderVo {
+public class OrderVo extends BaseModel {
 
     //新建订单时接收前端传值的参数
 

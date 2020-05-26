@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
+
 /**
  * @author Liang
  * @date 2020/5/6 20:31
@@ -28,11 +30,12 @@ public class GoodsController {
      * 查询全部商家
      */
     @ApiOperation(value ="查询全部商家",notes = "查询全部商家")
-    @PostMapping("listBusiness")
+    @GetMapping("listBusiness")
     public ResponseVo listBusiness(){
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用查询全部商家接口！");
             responseVo = goodsService.listBusiness();
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -52,6 +55,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用图片上传接口！");
             responseVo = goodsService.uploadImage(file);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -71,6 +75,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商品新增接口！");
             responseVo = goodsService.addGoods(goods);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -90,6 +95,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商品列表查询接口！");
             responseVo = goodsService.listGoods(goods);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -109,6 +115,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商品详情查询接口！");
             responseVo = goodsService.findGoodsBySkuCode(skuCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -128,6 +135,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商家详情查询接口！");
             responseVo = goodsService.findBusinessByCode(businessCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -147,6 +155,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商品修改接口！");
             responseVo = goodsService.updateGoodsInfo(goods);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -166,6 +175,7 @@ public class GoodsController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用商品修改接口！");
             responseVo = goodsService.deleteGoods(skuCode,loginAccount);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -182,11 +192,12 @@ public class GoodsController {
      */
     @ApiOperation(value ="商品的上架和下架",notes = "商品的上架和下架")
     @GetMapping("updateGoodStatus")
-    public ResponseVo updateGoodStatus(String skuCode, String loginAccount, String status){
+    public ResponseVo updateGoodStatus(String skuCode, String loginAccount, String skuStatus){
 
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = goodsService.updateGoodStatus(skuCode,loginAccount,status);
+            System.out.println(new Date() +"   调用商品的上架和下架接口！");
+            responseVo = goodsService.updateGoodStatus(skuCode,loginAccount,skuStatus);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);

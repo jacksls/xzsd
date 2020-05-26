@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * @author Liang
  * @date 2020/5/11 9:27
@@ -32,6 +34,7 @@ public class PictureController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用轮播图新增接口！");
             responseVo = pictureService.addPic(picture);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -51,6 +54,7 @@ public class PictureController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用轮播图列表查询接口！");
             responseVo = pictureService.listPic(picture);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -70,6 +74,7 @@ public class PictureController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用轮播图启用、禁用、删除接口！");
             responseVo = pictureService.updatePic(picture);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);

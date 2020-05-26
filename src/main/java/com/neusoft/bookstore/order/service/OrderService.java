@@ -19,6 +19,6 @@ public interface OrderService {
 
     ResponseVo findOrderByOrderCode(String orderCode);
 
-    ResponseVo findOrdersByloginAccount(String loginAccount, Integer payStatus);
+    ResponseVo findOrdersByloginAccount(Order order);
 
 }

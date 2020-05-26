@@ -223,7 +223,7 @@ public class OrderServiceImpl implements OrderService {
             return responseVo;
         }
         //根据orderCode查询商品详情
-        List<OrderDetail> orderDetailList = orderMapper.findOrderDetailByOrderCode(orderCode);
+        List<OrderDetail> orderDetailList = orderMapper.findOrderByOrderCode(orderCode);
 
         if (orderDetailList != null && orderDetailList.size() > 0) {
             for (int i = 0; i < orderDetailList.size(); i++) {
@@ -249,23 +249,33 @@ public class OrderServiceImpl implements OrderService {
      * app查询订单信息
      */
     @Override
-    public ResponseVo findOrdersByloginAccount(String loginAccount, Integer payStatus) {
+    public ResponseVo findOrdersByloginAccount(Order order) {
         /**
          * app查询订单信息：查询该用户所有的订单以及订单下的商品信息
          * 1:校验loginAccount、 payStatus 传值是否存在
          * 2:返回该用户所有的订单及订单下的商品信息（支付状态、订单编码、商品名称、售价商品购买数量、订单总金额、商品图片、创建时间）
          */
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "查询失败!");
-        if (StringUtils.isEmpty(loginAccount) || StringUtils.isEmpty(payStatus)) {
+        if (StringUtils.isEmpty(order.getLoginAccount()) || StringUtils.isEmpty(order.getPayStatus())) {
             responseVo.setMsg("输入信息不能为空！");
             return responseVo;
         }
         //payStatus传值是否是0或1或2或3
-        if (payStatus != 0 && payStatus != 1 && payStatus != 2 && payStatus != 3) {
+        if (order.getPayStatus() != 0 && order.getPayStatus() != 1 && order.getPayStatus() != 2 && order.getPayStatus() != 3) {
             responseVo.setMsg("商品状态不正确！");
             return responseVo;
         }
+
+        //判断是否需要分页
+        Integer pageNum = order.getPageNum();
+        Integer pageSize = order.getPageSize();
+        if(pageNum!=null && pageSize!=null){
+            PageHelper.startPage(pageNum, pageSize);
+        }
+
         //根据loginAccount查询商品详情
+        String loginAccount=order.getLoginAccount();
+        Integer payStatus=order.getPayStatus();
         List<OrderDetail> ordersByloginAccount = orderMapper.findOrdersByloginAccount(loginAccount, payStatus);
         if (ordersByloginAccount != null && ordersByloginAccount.size() > 0) {
             for (int i = 0; i < ordersByloginAccount.size(); i++) {
@@ -281,8 +291,14 @@ public class OrderServiceImpl implements OrderService {
             responseVo.setMsg("未查询到指定商品!");
             return responseVo;
         }
+
         //返回该用户所有的订单及订单下的商品信息
-        responseVo.setData(ordersByloginAccount);
+        if(pageNum!=null && pageSize!=null){
+            PageInfo<OrderDetail> pageInfo = new PageInfo<>(ordersByloginAccount);
+            responseVo.setData(pageInfo);
+        }else {
+            responseVo.setData(ordersByloginAccount);
+        }
         responseVo.setMsg("查询成功!");
         responseVo.setCode(ErrorCode.SUCCESS);
         responseVo.setSuccess(true);

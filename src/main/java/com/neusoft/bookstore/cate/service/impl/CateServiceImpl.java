@@ -82,7 +82,7 @@ public class CateServiceImpl implements CateService {
             responseVo.setSuccess(false);
             return responseVo;
         }
-        //根据菜单编码查询分类详情
+        //根据分类编码查询分类详情
         Cate cate = cateMapper.findCateByCateCode(cateCode);
         if (cate == null) {
             responseVo.setCode(ErrorCode.FAIL);
@@ -126,7 +126,7 @@ public class CateServiceImpl implements CateService {
             return responseVo;
         }
         //需要判断该节点下是否有子节点
-        List<Menu> menuLists = cateMapper.findChildCates(cateCode);
+        List<Cate> menuLists = cateMapper.findChildCates(cateCode);
         if (menuLists!=null&& menuLists.size()>0){
             //判断是否有子集
             responseVo.setMsg("当前分类下有子级，无法删除!");
@@ -229,7 +229,7 @@ public class CateServiceImpl implements CateService {
     }
 
     private void cateToTree(BaseTree rootTree, Cate cate) {
-        //节点的id存菜单编码
+        //节点的id存分类编码
         rootTree.setNodeId(cate.getCateCode());
         rootTree.setNodeName(cate.getCateName());
         rootTree.setAttribute(cate);

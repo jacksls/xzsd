@@ -33,7 +33,7 @@ public interface GoodsMapper {
 
     int deleteGoods(String skuCode);
 
-    int updateGoodStatus(String skuCode, String updatedBy, String status);
+    int updateGoodStatus(String skuCode, String updatedBy, String skuStatus);
 
     int addGoods(Goods goods);
 

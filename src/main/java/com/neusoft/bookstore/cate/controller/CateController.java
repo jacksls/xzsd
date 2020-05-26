@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * @author Liang
  * @date 2020/4/30 20:31
@@ -33,6 +35,7 @@ public class CateController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用新增分类接口！");
             responseVo = cateService.addCate(cate);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -52,6 +55,7 @@ public class CateController {
     public ResponseVo listCateTree(){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用分类树查询接口！");
             responseVo = cateService.listCateTree();
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -71,6 +75,7 @@ public class CateController {
     public ResponseVo findCateByCode(String cateCode){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用分类详情查询息接口！");
             responseVo = cateService.findCateByCode(cateCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -89,6 +94,7 @@ public class CateController {
     public ResponseVo updateCateByCode(@RequestBody Cate cate){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用修改分类信息接口！");
             responseVo = cateService.updateCateByCode(cate);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -108,6 +114,7 @@ public class CateController {
     public ResponseVo deleteCateByCode(String cateCode){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用删除分类信息接口！");
             responseVo = cateService.deleteCateByCode(cateCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -127,6 +134,7 @@ public class CateController {
 
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用级联查询接口！");
             responseVo = cateService.findCateByCateCode(cateCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);

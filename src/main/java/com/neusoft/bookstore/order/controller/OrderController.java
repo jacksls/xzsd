@@ -4,13 +4,13 @@ import com.neusoft.bookstore.order.model.Order;
 import com.neusoft.bookstore.order.model.OrderVo;
 import com.neusoft.bookstore.order.service.OrderService;
 import com.neusoft.bookstore.util.ErrorCode;
-import com.neusoft.bookstore.util.GoodsInfoException;
 import com.neusoft.bookstore.util.ResponseVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,11 +32,12 @@ public class OrderController {
     public ResponseVo addOrder(@RequestBody List<OrderVo> orderVos){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用订单创建接口！");
             responseVo = orderService.addOrder(orderVos);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);
-            ////处理异常，提示前台服务端有异常
+            //处理异常，提示前台服务端有异常
             throw e;
         }
         return responseVo;
@@ -47,9 +48,10 @@ public class OrderController {
      */
     @ApiOperation(value ="订单列表查询",notes = "订单列表查询")
     @PostMapping("listOrder")
-    public ResponseVo listOrder( Order order){
+    public ResponseVo listOrder(@RequestBody Order order){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用订单列表查询接口！");
             responseVo = orderService.listOrder(order);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -64,10 +66,11 @@ public class OrderController {
      * 订单详情查询
      */
     @ApiOperation(value ="订单详情查询",notes = "订单详情查询")
-    @PostMapping("findOrderByOrderCode")
+    @GetMapping("findOrderByOrderCode")
     public ResponseVo findOrderByOrderCode(String orderCode){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用订单详情查询接口！");
             responseVo = orderService.findOrderByOrderCode(orderCode);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -83,10 +86,11 @@ public class OrderController {
      */
     @ApiOperation(value ="app查询所有订单信息",notes = "app查询所有订单信息")
     @PostMapping("findOrdersByloginAccount")
-    public ResponseVo findOrdersByloginAccount(String loginAccount, Integer payStatus){
+    public ResponseVo findOrdersByloginAccount(@RequestBody Order order){
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = orderService.findOrdersByloginAccount(loginAccount,payStatus);
+            System.out.println(new Date() +"   调用app查询所有订单信息接口！");
+            responseVo = orderService.findOrdersByloginAccount(order);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);

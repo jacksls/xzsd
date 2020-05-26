@@ -28,11 +28,11 @@ public interface CustomerMapper {
 
     Customer findCustomerByPhoneAndAccountExOwn(Customer customer);
 
-    int updateCustomerById(Customer customer);
+    int updateCustomer(Customer customer);
 
     int deleteCustomerById(Integer id);
 
-    int updatePwdById(HashMap<Object, Object> map);
+    int updatePwd(HashMap<Object, Object> map);
 
     int updateScore(Map<Object, Object> map);
 }

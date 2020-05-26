@@ -19,11 +19,11 @@ public interface CustomerService {
 
     ResponseVo findCustomerById(Integer id);
 
-    ResponseVo updateCustomerById(Customer customer);
+    ResponseVo updateCustomer(Customer customer);
 
     ResponseVo deleteCustomerById(Integer id);
 
-    ResponseVo updatePwdById(String originPwd, String newPwd, Integer userId, String userAccount);
+    ResponseVo updatePwd(String originPwd, String newPwd, Integer userId, String userAccount);
 
-    ResponseVo updateScore(String frontScore, Integer userId, String userAccount);
+    ResponseVo updateScore(String frontScore, Integer id, String userAccount);
 }

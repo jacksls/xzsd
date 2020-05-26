@@ -140,9 +140,14 @@
         </dependency>
         <!--七牛云服务器-->
     </dependencies>
+
     <build>
+        <!--用于打成jar包的名字-->
+        <finalName>xzsd</finalName>
+
         <plugins>
             <plugin>
+                <!--用于启动springBoot的插件-->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>

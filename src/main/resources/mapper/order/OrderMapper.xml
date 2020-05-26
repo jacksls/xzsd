@@ -84,6 +84,7 @@
         )
     </insert>
 
+
     <select id="listOrder" parameterType="com.neusoft.bookstore.order.model.Order" resultMap="orderMap">
         SELECT
             tso.order_code,
@@ -129,9 +130,10 @@
         <if test="orderStatus!=null">
             and tso.order_status like concat('%',#{orderStatus},'%')
         </if>
+
     </select>
 
-    <select id="findOrderDetailByOrderCode" parameterType="string" resultMap="orderDetailMap">
+    <select id="findOrderByOrderCode" parameterType="string" resultMap="orderDetailMap">
         SELECT
             tsod.order_code,
             tsod.sku_code,

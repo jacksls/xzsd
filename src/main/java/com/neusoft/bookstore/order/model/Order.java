@@ -1,10 +1,13 @@
 package com.neusoft.bookstore.order.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.neusoft.bookstore.util.BaseModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author Liang
@@ -42,5 +45,14 @@ public class Order extends BaseModel {
     @ApiModelProperty("订单状态名称")
     private String orderStatusName;
 
+    @ApiModelProperty("下单开始时间")
+    @JsonFormat(pattern="yyyy-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-dd HH:mm:ss")
+    private Date orderStartTime;
+
+    @ApiModelProperty("下单完成时间")
+    @JsonFormat(pattern="yyyy-dd HH:mm:ss")
+    @DateTimeFormat(pattern="yyyy-dd HH:mm:ss")
+    private Date orderEndTime;
 
 }

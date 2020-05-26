@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 /**
  * @author Liang
  * @date 2020/4/23 10:54
@@ -27,6 +29,7 @@ public class CustomerController {
     private ResponseVo addCustomer(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用注册新增用户接口！");
             responseVo = customerService.addCustomer(customer);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -42,6 +45,7 @@ public class CustomerController {
     private ResponseVo login(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用用户登录接口！");
             responseVo = customerService.login(customer);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -53,10 +57,11 @@ public class CustomerController {
     }
 
     @ApiOperation(value = "PC端用户退出", notes = "PC端用户退出")
-    @GetMapping("loginOut")
+    @PostMapping("loginOut")
     private ResponseVo loginOut(String userAccount){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用PC端用户退出接口！");
             responseVo = customerService.loginOut(userAccount);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -73,6 +78,7 @@ public class CustomerController {
     private ResponseVo listCustomers(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用用户列表查询接口！");
             responseVo = customerService.listCustomers(customer);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -88,6 +94,7 @@ public class CustomerController {
     private ResponseVo findCustomerById(Integer id){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用根据用户id查询单个用户信息接口！");
             responseVo = customerService.findCustomerById(id);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -100,10 +107,11 @@ public class CustomerController {
 
     @ApiOperation(value = "根据用户id修改用户信息", notes = "根据用户id修改用户信息")
     @PostMapping("updateCustomerById")
-    private ResponseVo updateCustomerById(@RequestBody Customer customer){
+    private ResponseVo updateCustomer(@RequestBody Customer customer){
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = customerService.updateCustomerById(customer);
+            System.out.println(new Date() +"   调用根据用户id修改用户信息接口！");
+            responseVo = customerService.updateCustomer(customer);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);
@@ -118,6 +126,7 @@ public class CustomerController {
     private ResponseVo deleteCustomerById(Integer id){
         ResponseVo responseVo = new ResponseVo();
         try {
+            System.out.println(new Date() +"   调用根据用户id删除用户信息接口！");
             responseVo = customerService.deleteCustomerById(id);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
@@ -130,10 +139,11 @@ public class CustomerController {
 
     @ApiOperation(value = "根据用户id修改用户密码", notes = "根据用户id修改用户密码")
     @GetMapping("updatePwdById")
-    private ResponseVo updatePwdById(String originPwd, String newPwd, Integer userId, String userAccount){
+    private ResponseVo updatePwd(String originPwd, String newPwd, Integer userId, String userAccount){
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = customerService.updatePwdById(originPwd, newPwd, userId, userAccount);
+            System.out.println(new Date() +"   调用根据用户id修改用户密码接口！");
+            responseVo = customerService.updatePwd(originPwd, newPwd, userId, userAccount);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);
@@ -145,10 +155,11 @@ public class CustomerController {
 
     @ApiOperation(value = "修改用户积分金额", notes = "修改用户积分金额")
     @GetMapping("updateScore")
-    private ResponseVo updateScore(String frontScore, Integer userId, String userAccount){
+    private ResponseVo updateScore(String frontScore, Integer id, String userAccount){
         ResponseVo responseVo = new ResponseVo();
         try {
-            responseVo = customerService.updateScore(frontScore, userId, userAccount);
+            System.out.println(new Date() +"   调用修改用户积分金额接口！");
+            responseVo = customerService.updateScore(frontScore, id, userAccount);
         } catch (Exception e) {
             responseVo.setCode(ErrorCode.SERVER_EXCEPTION_CODE);
             responseVo.setSuccess(false);

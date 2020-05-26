@@ -23,7 +23,7 @@ public interface OrderMapper {
 
     List<Order> listOrder(Order order);
 
-    List<OrderDetail> findOrderDetailByOrderCode(String orderCode);
+    List<OrderDetail> findOrderByOrderCode(String orderCode);
 
     List<OrderDetail> findOrdersByloginAccount(@Param("loginAccount") String loginAccount, @Param("payStatus")Integer payStatus);
 

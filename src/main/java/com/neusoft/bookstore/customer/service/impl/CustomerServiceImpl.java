@@ -51,6 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
             responseVo.setMsg("注册失败，用户账号或者手机号已存在，请检查后重试!");
             return responseVo;
         }
+        if (!StringUtils.isEmpty(customer.getUserAccount())) {
+            responseVo.setMsg("注册失败，用户账号不能为空，请检查后重试!");
+            return responseVo;
+        }
         Integer isAdmin = customer.getIsAdmin();
         if (!StringUtils.isEmpty(isAdmin)) {
             //校验
@@ -72,9 +76,10 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setScore(frontScore);
 
         //对创建人赋值
+        //从redis中获取登录人
         Customer customerByRedis = (Customer) redisTemplate.opsForValue().get(customer.getLoginAccount());
         if (customerByRedis != null) {
-            customer.setCreatedBy(customer.getUserAccount());
+            customer.setCreatedBy(customerByRedis.getUserAccount());
         } else {
             customer.setCreatedBy("admin");
         }
@@ -191,7 +196,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseVo updateCustomerById(Customer customer) {
+    public ResponseVo updateCustomer(Customer customer) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败");
         Customer customerByDb = customerMapper.findCustomerByPhoneAndAccountExOwn(customer);
         if (customerByDb != null) {
@@ -210,7 +215,7 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             customer.setUpdatedBy("admin");
         }
-        int result = customerMapper.updateCustomerById(customer);
+        int result = customerMapper.updateCustomer(customer);
         //入库操作
         if (result == 1) {
             responseVo.setMsg("修改成功！");
@@ -246,7 +251,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseVo updatePwdById(String originPwd, String newPwd, Integer userId, String userAccount) {
+    public ResponseVo updatePwd(String originPwd, String newPwd, Integer userId, String userAccount) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败！");
         if (StringUtils.isEmpty(originPwd) || StringUtils.isEmpty(newPwd) || userId == null || StringUtils.isEmpty(userAccount)) {
             responseVo.setMsg("账号密码信息不完整！");
@@ -275,7 +280,7 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             map.put("userAccount", "admin");
         }
-        int result = customerMapper.updatePwdById(map);
+        int result = customerMapper.updatePwd(map);
         if (result == 1) {
             responseVo.setMsg("密码修改成功！");
             responseVo.setCode(ErrorCode.SUCCESS);
@@ -287,20 +292,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseVo updateScore(String frontScore, Integer userId, String userAccount) {
+    public ResponseVo updateScore(String frontScore, Integer id, String userAccount) {
         ResponseVo responseVo = new ResponseVo(false, ErrorCode.FAIL, "修改失败！");
-        if (StringUtils.isEmpty(frontScore) || userId == null || StringUtils.isEmpty(userAccount)) {
+        if (StringUtils.isEmpty(frontScore) || id == null || StringUtils.isEmpty(userAccount)) {
             responseVo.setMsg("输入信息不能为空！");
             return responseVo;
         }
-        Customer customerById = customerMapper.findCustomerById(userId);
+        Customer customerById = customerMapper.findCustomerById(id);
         if (customerById == null) {
             responseVo.setMsg("用户信息不存在！");
             return responseVo;
         }
         Map<Object, Object> map = new HashMap<>();
         map.put("frontScore",frontScore);
-        map.put("userId",userId);
+        map.put("userId",id);
         map.put("userAccount",userAccount);
         int result = customerMapper.updateScore(map);
         if (result == 1) {
