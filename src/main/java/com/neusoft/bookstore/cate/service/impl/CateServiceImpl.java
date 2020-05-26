@@ -4,7 +4,7 @@ import com.neusoft.bookstore.cate.mapper.CateMapper;
 import com.neusoft.bookstore.cate.model.Cate;
 import com.neusoft.bookstore.cate.service.CateService;
 import com.neusoft.bookstore.customer.model.Customer;
-import com.neusoft.bookstore.menu.model.Menu;
+
 import com.neusoft.bookstore.util.BaseTree;
 import com.neusoft.bookstore.util.ErrorCode;
 import com.neusoft.bookstore.util.ResponseVo;

@@ -183,7 +183,9 @@
         INNER JOIN t_sys_customer tsc ON tsc.id=tso.order_user_id
         WHERE tsod.is_delete=0
         AND (phone=#{loginAccount} OR user_account=#{loginAccount})
-        AND tso.pay_status=#{payStatus}
+        <if test="payStatus!=null">
+            AND tso.pay_status=#{payStatus}
+        </if>
         GROUP BY tsod.order_code
     </select>
 

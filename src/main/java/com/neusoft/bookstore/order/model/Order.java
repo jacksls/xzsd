@@ -45,7 +45,7 @@ public class Order extends BaseModel {
     @ApiModelProperty("订单状态名称")
     private String orderStatusName;
 
-    @ApiModelProperty("下单开始时间")
+/*    @ApiModelProperty("下单开始时间")
     @JsonFormat(pattern="yyyy-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-dd HH:mm:ss")
     private Date orderStartTime;
@@ -53,6 +53,6 @@ public class Order extends BaseModel {
     @ApiModelProperty("下单完成时间")
     @JsonFormat(pattern="yyyy-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-dd HH:mm:ss")
-    private Date orderEndTime;
+    private Date orderEndTime;*/
 
 }
