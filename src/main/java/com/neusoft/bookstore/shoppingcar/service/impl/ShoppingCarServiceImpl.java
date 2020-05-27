@@ -40,7 +40,7 @@ public class ShoppingCarServiceImpl implements ShoppingCarService {
     @Override
     public ResponseVo addShoppingCar(ShoppingCar shoppingCar) {
         /*
-            1: 登陆
+            1: 登录
             2: 商品信息(商品便编码)、商家编码、购买人(app登陆人)， 数量默认是1不需要传
             3: 判断是从详情页加入购车还是购物车列表页加入购物车， 加入时校验商品库存
                 从详情页加入购车:如果是第一次加入 生成一条新的记录，否则购物车数据量加1

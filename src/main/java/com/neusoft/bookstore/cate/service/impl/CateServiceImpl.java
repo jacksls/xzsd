@@ -211,7 +211,7 @@ public class CateServiceImpl implements CateService {
                 BaseTree childTree = new BaseTree();
                 cateToTree(childTree,cate);
                 //需要将子树加入根数
-                //许需要判断根节点的子节点是否已经创建
+                //需要判断根节点的子节点是否已经创建
                 if(childTree.getNodeId()!=null){
                     //需要将子树加入根数
                     if(rootTree.getChildNodes()==null){
